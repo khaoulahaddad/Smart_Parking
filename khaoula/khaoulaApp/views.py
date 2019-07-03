@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from khaoulaApp.models import Place
+from khaoulaApp.models import Reservation
 import json
 import time
-from chronothread import Chrono
+from datetime import datetime
+from django.utils.timezone import get_current_timezone
+#from chronothread import Chrono
 
 # Create your views here.
 def home(request):
@@ -12,14 +15,17 @@ def home(request):
 #changer l'etat du Place (update)
 def reserver(request, identif):
 	p=Place.objects.get(id=identif)
-	place={}
 	if(p.etat=='l'):
 		Place.objects.select_related().filter(id=identif).update(etat='o')
-		chrono =Chrono(identif)
-		chrono.start()
+		Reservation.objects.create(idPlace_id=identif,idCar_id=5, date_debut=str(datetime.now(tz=get_current_timezone())))
+		#chrono =Chrono(identif)
+		#chrono.start()
+		
 	else :
 		Place.objects.select_related().filter(id=identif).update(etat='l')
-	return HttpResponse(json.dumps(place))
+			if(Reservation.oobjects.get(idPlace_id=identif).date_fin= None)
+				Reservation.objects.select_related().filter(idPlace_id=identif).update(date_fin=str(datetime.now(tz=get_current_timezone())))
+	return HttpResponse("done")
 
 def money(request, identif):
 	p1=Place.objects.get(id=identif)
@@ -38,17 +44,16 @@ def color(request, identif):
 	p=Place.objects.get(id=identif)
 	plist={}
 	plist["etat"] = p.etat
-	plist["heur"] = p.heur
-	plist["minute"]= p.minute
-	plist["seconde"]= p.sec
+	#plist["heur"] = p.heur
+	#plist["minute"]= p.minute
+	#plist["seconde"]= p.sec
     	return HttpResponse(json.dumps(plist))
 
-def argent(request, identif):
+def updateDate(request, identif):
 	p=Place.objects.get(id=identif)
 	h=p.heur
 	m=p.minute
 	s=p.sec
-	#if(p.etat=='l'and ((h!=0) or (m!=0) or (s!=0))):
 	Place.objects.select_related().filter(id=identif).update(heur=0)
 	Place.objects.select_related().filter(id=identif).update(minute=0)
 	Place.objects.select_related().filter(id=identif).update(sec=0)

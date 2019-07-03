@@ -23,7 +23,6 @@ class Chrono (Thread):
 				self.m=0
 				self.h=self.h+1
 			time.sleep(1)
-			print "a"
 			Place.objects.select_related().filter(id=self.identif).update(heur=self.h)
 			Place.objects.select_related().filter(id=self.identif).update(minute=self.m)
 			Place.objects.select_related().filter(id=self.identif).update(sec=self.s)

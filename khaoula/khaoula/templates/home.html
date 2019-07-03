@@ -13,7 +13,7 @@ function afficherArgent(id)
 		if(window.confirm(donnee.money))
 		{
 			var htt = new XMLHttpRequest();
-			var ur = 'argent/'+id;
+			var ur = 'updateDate/'+id;
 			htt.open('GET', ur, true);
 			htt.send();
 		}
@@ -23,9 +23,7 @@ function afficherArgent(id)
 }
 function Couleur(id)
 {
-	var http = new XMLHttpRequest();
-	var url = 'reserver/'+id;
-	http.open('GET', url, true);
+
 	var capteur=0;
 	//Send the proper header information along with the request
 	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -36,13 +34,20 @@ function Couleur(id)
 		if(document.getElementById(id).style['background-color']=="green")
 			{
 			document.getElementById(id).style['background-color']="red";
+			var http = new XMLHttpRequest();
+			var url = 'reserver/'+id;
+			http.open('GET', url, true);
+			http.send();
 			
 			}
 		else
 			{
 			document.getElementById(id).style['background-color']="green"
-			afficherArgent(id)
-			
+			var http = new XMLHttpRequest();
+			var url = 'reserver/'+id;
+			http.open('GET', url, true);
+			http.send();
+			//afficherArgent(id)
 			}
 		setTimeout(function(){ 
 			if (capteur ==1)
@@ -61,11 +66,11 @@ function Couleur(id)
 		}
 	    
 	}
-	http.send();
+	
 }
 function init_Couleur()
 {
-	liste = [10,11,12,13,14,15,16,20,21,22,23,24,25,26,30,31,32,33,34,35,36];
+	liste = [10,11,12,13,14,15,20,21,22,23,24,25,30,31,32,33,34,35];
 	liste.forEach(function(id)
 	{
 		var http = new XMLHttpRequest();
@@ -91,7 +96,6 @@ function init_Couleur()
 	http.send();	    
 	})
 	
-
 }
 setInterval(init_Couleur, 5000);
 
