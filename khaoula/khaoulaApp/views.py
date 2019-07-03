@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from khaoulaApp.models import Place
 from khaoulaApp.models import Reservation
+from khaoulaApp.models import Facture
 import json
 import time
 from datetime import datetime
@@ -12,6 +13,7 @@ from django.utils.timezone import get_current_timezone
 # Create your views here.
 def home(request):
 	return TemplateResponse(request, 'home.html',{})
+
 #changer l'etat du Place (update)
 def reserver(request, identif):
 	p=Place.objects.get(id=identif)
@@ -23,8 +25,7 @@ def reserver(request, identif):
 		
 	else :
 		Place.objects.select_related().filter(id=identif).update(etat='l')
-			if(Reservation.oobjects.get(idPlace_id=identif).date_fin= None)
-				Reservation.objects.select_related().filter(idPlace_id=identif).update(date_fin=str(datetime.now(tz=get_current_timezone())))
+		Reservation.objects.select_related().filter(idPlace_id=identif).update(date_fin=str(datetime.now(tz=get_current_timezone())))
 	return HttpResponse("done")
 
 def money(request, identif):

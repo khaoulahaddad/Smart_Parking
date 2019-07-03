@@ -21,7 +21,7 @@ class Reservation(models.Model):
 
 class Facture(models.Model):
 	idReservation = models.ForeignKey('Reservation')
-	prix_total= models.IntegerField()
+	prix_total= models.IntegerField(null=True)
 	def __unicode__(self):
 		return "{0} [{1}]".format(self.num,self.idReservation.num,self.prix_total)
 
