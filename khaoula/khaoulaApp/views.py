@@ -25,7 +25,7 @@ def reserver(request, identif):
 		
 	else :
 		Place.objects.select_related().filter(id=identif).update(etat='l')
-		Reservation.objects.select_related().filter(idPlace_id=identif).update(date_fin=str(datetime.now(tz=get_current_timezone())))
+		Reservation.objects.filter(idPlace_id=identif, date_fin= None).update(date_fin=str(datetime.now(tz=get_current_timezone())))
 	return HttpResponse("done")
 
 def money(request, identif):
