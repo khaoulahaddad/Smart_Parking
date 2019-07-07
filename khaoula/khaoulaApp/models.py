@@ -2,7 +2,7 @@
 from django.db import models
 
 class Place(models.Model):
-	etat = models.CharField(max_length=1)
+	etat = models.BooleanField()
 	def __unicode__(self):
 		return "{0} [{1}]".format(self.num, self.etat)
 
@@ -24,4 +24,3 @@ class Facture(models.Model):
 	prix_total= models.IntegerField(null=True)
 	def __unicode__(self):
 		return "{0} [{1}]".format(self.num,self.idReservation.num,self.prix_total)
-

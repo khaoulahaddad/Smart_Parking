@@ -11,10 +11,7 @@ function afficherArgent(id)
 		var donnee=JSON.parse(http.responseText);
 		if(window.confirm(donnee.money))
 		{
-			var htt = new XMLHttpRequest();
-			var ur = 'updateDate/'+id;
-			htt.open('GET', ur, true);
-			htt.send();
+			print('ok')
 		}
 	}
 	http.send();
@@ -45,7 +42,8 @@ function Couleur(id)
 		http.onreadystatechange = function() 
 		{//Call a function when the state changes.
 		    if(http.readyState == 4 && http.status == 200)
-			{document.getElementById(id).style['background-color']="green"}
+			{document.getElementById(id).style['background-color']="green"
+			afficherArgent(id)}
 		}
 		http.send();
 	}
@@ -66,7 +64,7 @@ function init_Couleur()
 		    if(http.readyState == 4 && http.status == 200)
 			{
 			var donnee=JSON.parse(http.responseText);
-			if(donnee.etat=='o')
+			if(donnee.etat== 0)
 				{
 				document.getElementById(id).style['background-color']="red";
 				}
