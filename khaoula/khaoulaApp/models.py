@@ -7,7 +7,8 @@ class Place(models.Model):
 		return "{0} [{1}]".format(self.num, self.etat)
 
 class Voiture(models.Model):
-	matricule = models.CharField(max_length=15)
+	matricule_gauche = models.CharField(max_length=3)
+	matricule_droite = models.CharField(max_length=4)
 	def __unicode__(self):
 		return "{0} [{1}]".format(self.num, self.matricule)
 

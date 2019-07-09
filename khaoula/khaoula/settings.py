@@ -29,6 +29,7 @@ TEMPLATE_DIRS = (
 os.path.join(BASE_DIR, 'khaoula/templates'),
 )
 
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -45,7 +46,6 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

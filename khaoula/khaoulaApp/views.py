@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.conf import settings
+from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from khaoulaApp.models import Place
@@ -16,6 +18,15 @@ from time import strftime
 #def login(request):
 #	Reservation.objects.create(matricule = identif)
 #	return TemplateResponse(request, 'login.html',{})
+class LoginView(TemplateView):
+
+  template_name = 'front/login.html'
+
+  def post(self, request, **kwargs):
+
+    maticule_gauche = request.POST.get('matricule_gauche', False)
+    matricule_droite = request.POST.get('matricule_droite', False)
+    return render(request, self.template_name)
 
 def home(request):
 	return TemplateResponse(request, 'home.html',{})
