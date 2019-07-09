@@ -9,9 +9,10 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    #url(r'^$','khaoulaApp.views.login',name='login'),
     url(r'^$','khaoulaApp.views.home',name='home'),
     url(r'^reserver/(?P<identif>\d+)/$','khaoulaApp.views.reserver'),
     #url(r'^updateDate/(?P<identif>\d+)/$','khaoulaApp.views.updateDate'),
     url(r'^money/(?P<identif>\d+)/$','khaoulaApp.views.money'),
-    url(r'^color/(?P<identif>\d+)/$','khaoulaApp.views.color'),
+    url(r'^idplace/','khaoulaApp.views.idplace'),
 )
