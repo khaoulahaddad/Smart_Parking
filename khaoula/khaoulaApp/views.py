@@ -24,8 +24,8 @@ class LoginView(TemplateView):
 
   def post(self, request, **kwargs):
 
-    maticule_gauche = request.POST.get('matricule_gauche', False)
-    matricule_droite = request.POST.get('matricule_droite', False)
+    matri_gauche = request.POST.get('matricule_gauche', False)
+    matri_droite = request.POST.get('matricule_droite', False)
     return render(request, self.template_name)
 
 def home(request):
@@ -35,15 +35,15 @@ def home(request):
 def reserver(request, identif):
 	datetimeFormat = '%Y/%m/%d %H:%M:%s:%f'
 	p=Place.objects.get(id=identif)
-	if(p.etat== 1):
+	if(p.etat== 0):
 		#voiture = Voiture.objects.last()
-		Place.objects.select_related().filter(id=identif).update(etat= 0)
+		Place.objects.select_related().filter(id=identif).update(etat= 1)
 		Reservation.objects.create(idPlace_id=identif,idCar_id=5, date_debut=str(datetime.now(tz=get_current_timezone())))
 		#chrono =Chrono(identif)
 		#chrono.start()
 		
 	else :
-		Place.objects.select_related().filter(id=identif).update(etat=1)
+		Place.objects.select_related().filter(id=identif).update(etat=0)
 		res=Reservation.objects.get(idPlace_id=identif, date_fin= None).id
 		Facture.objects.create(idReservation_id=(Reservation.objects.get(idPlace_id=identif, date_fin= None).id))
 		Reservation.objects.filter(idPlace_id=identif, date_fin= None).update(date_fin=str(datetime.now(tz=get_current_timezone())))

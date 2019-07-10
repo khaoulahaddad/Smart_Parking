@@ -1,12 +1,23 @@
+<script type="text/javascript">
+   function test(obj)
+  {
+   var data = obj.value;
+   
+   if (data.match(/[^0-9]/))
+   {
+      alert("Vous devez entrer une valeur numérique !");
+      obj.value="";
+   }
+  }
+</script>
+
 <form method="POST" action="/home">
 
   <div class="container">
     <label for="uname"><b>Matricule</b></label>
-    <input type="integer" name="matricule_gauche" required>
+    <input type="text" name="matricule_gauche" maxlength="3" onkeyup="test(this)" required>
     <label for="uname"><b>TUN</b></label>
-    <input type="integer" name="matricule_droite"required>
+    <input type="text" name="matricule_droite" maxlength="4" onkeyup="test(this)" required>
     <button type="submit" value="login" >Login</button>
-  </div>
-
-  
+  </div>  
 </form>
