@@ -10,7 +10,9 @@ function Couleur(id){
 					{console.log(state.etat)
 					$('#'+id).css("background-color", "red");}
 				else if(state.etat==1)
+				{
 					$('#'+id).css("background-color", "green");
+				}
 					}
 				});
 };
