@@ -1,16 +1,18 @@
 function Couleur(id){
-console.log(id+" "+$('#'+id).css("background-color"))
+//console.log(id+" "+$('#'+id).css("background-color"))
 	$.ajax({
         type: 'GET',
         url:  'reserver/'+id,
 	 	success: 
-			function(){
-			if($('#'+id).css('background-color') == "rgb(0, 128, 0)")
-				$('#'+id).css("background-color", "red");
-			else
-				$('#'+id).css("background-color", "green");
-		 }
-		});
+			function(etat){
+					var state = $.parseJSON(etat)
+				if(state.etat==0)
+					{console.log(state.etat)
+					$('#'+id).css("background-color", "red");}
+				else if(state.etat==1)
+					$('#'+id).css("background-color", "green");
+					}
+				});
 };
 $(document).ready( function() 
 {
@@ -19,7 +21,7 @@ $(document).ready( function()
 		url:  'idplace/',
 		success: function(data){
 			var li = $.parseJSON(data)
-			console.log(typeof(li));
+			//console.log(typeof(li));
 			Object.keys(li).forEach(element => {
 				if(li[element].etat == true)
 					{$('#'+li[element].idplace).css("background-color", "red");}
