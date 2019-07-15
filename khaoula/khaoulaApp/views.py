@@ -33,6 +33,8 @@ class LoginView(TemplateView):
 def login(request):
 	matri_gauche = request.POST.get('matricule_gauche',False)
 	matri_droite = request.POST.get('matricule_droite',False)
+	request.session['my_car']=str(matri_gauche)+str(matri_droite)
+	#print(request.session['my_car'])
 	#verification avec openCv
 	if(not Voiture.objects.filter(matricule_gauche=matri_gauche, matricule_droite=matri_droite)):
 		Voiture.objects.create(matricule_gauche=matri_gauche, matricule_droite=matri_droite)
@@ -43,7 +45,13 @@ def login(request):
 
 
 def home(request):
-	return TemplateResponse(request, 'home.html',{})
+	my_car = request.session.get('my_car')
+	print(my_car)
+	if (not(my_car)):
+		return HttpResponseRedirect('/')
+	else :
+		print("ok")
+		return TemplateResponse(request, 'home.html',{})
 
 #changer l'etat du Place (update)
 def reserver(request, identif):
@@ -80,6 +88,8 @@ def reserver(request, identif):
 				money=money + 1	
 			Facture.objects.filter(idReservation_id=res).update(prix_total=money)
 			response=HttpResponse(json.dumps(place))
+			del request.session['my_car']
+			print("ok")
 			response.delete_cookie('Your_Cookies')
 			return response
 		else:
