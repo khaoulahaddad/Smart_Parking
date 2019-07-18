@@ -1,10 +1,18 @@
 # Create your models here.
 from django.db import models
 
-class Place(models.Model):
-	etat = models.BooleanField()
+class Etage(models.Model):
 	def __unicode__(self):
-		return "{0} [{1}]".format(self.num, self.etat)
+		return "{0} [{1}]".format(self.num)
+
+class Place(models.Model):
+	numero=models.IntegerField(null=True)
+	etat = models.BooleanField()
+	idEtage = models.ForeignKey('Etage')
+	class Meta:
+		unique_together = (('numero', 'idEtage'),)
+	def __unicode__(self):
+		return "{0} [{1}]".format(self.num,self.numero, self.etat, self.idEtage.num)
 
 class Voiture(models.Model):
 	matricule_gauche = models.CharField(max_length=3,null=True)

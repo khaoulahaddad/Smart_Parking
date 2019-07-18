@@ -11,11 +11,29 @@ function Couleur(id){
 					$('#'+id).css("background-color", "red");}
 				else if(state.etat==1)
 				{
-					$('#'+id).css("background-color", "green");
+					if(window.confirm(state.money))
+					{
+						$('#'+id).css("background-color", "green");
+					}
+					
 				}
 					}
 				});
 };
+//function afficherArgent(id)
+//{
+//	$.ajax({
+//		type:'GET',
+//		url: 'money/'+id,
+//		success:
+//		function(money){
+//			var state = $.parseJSON(money)
+
+//		}
+//	});
+			
+//};
+
 $(document).ready( function() 
 {
 	$.ajax({
