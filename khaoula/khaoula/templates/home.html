@@ -1,50 +1,24 @@
 <head>
     <title>Bienvenue au Parking</title>
-    {% load static %}
+<!--    {% load static %}-->
   <script src="{% static 'jquery.js' %}"></script> 
 <script src="{% static 'mainjquery.js' %}"></script> 
 </head>
-<body >
-<meta name="viewport" content="width=device-width" />
-<table align="center" border="6" cellpadding="12"  cellspacing="20" width="80%" height="100%">
-	<tr>
-		<th id="15" align="center" valign="bottom" onclick="Couleur('15')">15</th>
-		<th id="14" align="center" valign="bottom" onclick="Couleur('14')">14</th>
-		<th id="13" align="center" valign="bottom" onclick="Couleur('13')">13</th>
-		<th id="12" align="center" valign="bottom" onclick="Couleur('12')">12</th>
-		<th id="11" align="center" valign="bottom" onclick="Couleur('11')">11</th>
-		<th id="10" align="center" valign="bottom" onclick="Couleur('10')">10</th>
-	</tr>
 
-	<tr height="50">
-		<td colspan= 7 align=center></td>
-	</tr> 
+<div>
+		<label for="matricule"><b>Matricule : </b></label><br/>
+		{{matricule_gauche}}
+			<label for="uname">TUN</label>
+		{{matricule_droite}}<br/>
 
-	<tr>
-		<th id="25" align="center" valign="bottom" onclick="Couleur('25')">25</th>
-		<th id="24" align="center" valign="bottom" onclick="Couleur('24')">24</th>
-		<th id="23" align="center" valign="bottom" onclick="Couleur('23')">23</th>
-		<th id="22" align="center" valign="bottom" onclick="Couleur('22')">22</th>
-		<th id="21" align="center" valign="bottom" onclick="Couleur('21')">21</th>
-		<th id="20" align="center" valign="bottom" onclick="Couleur('20')">20</th>
-	</tr>
+		<label for="etage"><b>Etage : </b></label><br/>
+		{{numero_etage}}<br/>
 
-	<tr height="50">
-		<td colspan=7 align=center></td>
-	</tr>
+		<label for="place"><b>Place : </b></label><br/>
+		{{numero_palce}}<br/>
 
-	<tr>
-		<th id="35" align="center" valign="bottom" onclick="Couleur('35')">35</th>
-		<th id="34" align="center" valign="bottom" onclick="Couleur('34')">34</th>
-		<th id="33" align="center" valign="bottom" onclick="Couleur('33')">33</th>
-		<th id="32" align="center" valign="bottom" onclick="Couleur('32')">32</th>
-		<th id="31" align="center" valign="bottom" onclick="Couleur('31')">31</th>
-		<th id="30" align="center" valign="bottom" onclick="Couleur('30')">30</th>
-	</tr>
+		<label for="date_debut"><b>Date d'entrée: </b></label><br/>
+		{{date_debut}}<br/>
 
-	<tr height="50">
-		<td colspan=7 align=center></td>
-	</tr>
-
-</table>
-</body>
+		<button type="submit" value="payer" onclick="money()"><b>Payer</b></button>
+</div>

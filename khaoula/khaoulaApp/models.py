@@ -18,7 +18,7 @@ class Voiture(models.Model):
 	matricule_gauche = models.CharField(max_length=3,null=True)
 	matricule_droite = models.CharField(max_length=4,null=True)
 	def __unicode__(self):
-		return "{0} [{1}]".format(self.num, self.matricule)
+		return "{0} [{1}]".format(self.num,self.matricule_gauche, self.matricule_droite)
 
 class Reservation(models.Model):
 	idPlace = models.ForeignKey('Place')
@@ -26,7 +26,7 @@ class Reservation(models.Model):
 	date_debut= models.DateTimeField(null=True)
 	date_fin= models.DateTimeField(null=True)
 	def __unicode__(self):
-		return "{0} [{1}]".format(self.num,self.etat,self.idPlace.num,self.idCar.num,self.date_debut,self.date_fin)
+		return "{0} [{1}]".format(self.num,self.idPlace.num,self.idCar.num,self.date_debut,self.date_fin)
 
 class Facture(models.Model):
 	idReservation = models.ForeignKey('Reservation')

@@ -34,7 +34,9 @@ def login(request):
 #verification avec openCv True
 	if(not Voiture.objects.filter(matricule_gauche=matri_gauche, matricule_droite=matri_droite)):
 		Voiture.objects.create(matricule_gauche=matri_gauche, matricule_droite=matri_droite)
-	return HttpResponseRedirect('/home')
+	voiture_num=Voiture.objects.get(matricule_gauche=matri_gauche, matricule_droite=matri_droite).id
+	response.set_cookie('Your_Cookies', voiture_num)
+	return response
 #else:
 	##if(not(request.COOKIES.get('Your_Cookies'))):
 		##return HttpResponseRedirect('/')
@@ -43,53 +45,62 @@ def login(request):
 
 def home(request):
 	my_car = request.session.get('my_car')
-	print(my_car)
 	if (not(my_car)):
 		return HttpResponseRedirect('/')
 	else :
-		#App:reserver_par_etage
-
-		return TemplateResponse(request, 'home.html',{})
-
-def reserver_par_Etage(request):
-	if(not(request.COOKIES.get('Your_Cookies'))):#vide
-		response= HttpResponse(json.dumps(resultat))
-		#degager id voiture:
-		voiture_num=Voiture.objects.get(matricule_gauche=matri_gauche, matricule_droite=matri_droite).id
-		response.set_cookie('Your_Cookies', voiture_num)
-		resultat_etage=True
-		numetage=1
-		last_id_etage=Eatge.objects.last().id
-		while ((resultat_etage==True) && (numetage <= last_id_etage)):
-			resultat_place=False
-			numplace=1
-			last_id_place=Place.objects.filter(idEtage_id=numetage).last().id
-			while((resultat_place==False) && (numplace <= last_id_place)):
-				p=Place.objects.get(id=numplace)
-				if (p.etat==0):
-					resultat_place=True
-				else :
-					numplace=num+1
-			if(resultat_place==True):
-				resultat_etage=False
+		resultat={}
+		voiture_num=int(request.COOKIES.get('Your_Cookies'))
+		matri_gauche=Voiture.objects.get(id=voiture_num).matricule_gauche
+		matri_droite =Voiture.objects.get(id=voiture_num).matricule_droite
+		resultat["matricule_gauche"]= matri_gauche
+		resultat["matricule_droite"]=matri_droite
+		if(not(Reservation.objects.filter(idCar_id=voiture_num, date_fin=None))):
+			resultat_etage=True
+			numetage=0
+			last_id_etage=Etage.objects.order_by('id').last().id
+			print(last_id_etage)
+			while ((resultat_etage==True) & (numetage <= last_id_etage)):
+				resultat_place=False
+				last_place = Place.objects.filter(idEtage_id=numetage).order_by('id').last().id
+				numplace = Place.objects.filter(idEtage_id=numetage).order_by('id').first().id
+				#print(last_id_place.id)
+				while((resultat_place==False) & (numplace <=last_place )):
+					p=Place.objects.get(id=numplace)
+					if (p.etat==0):
+						resultat_place=True
+					else :
+						numplace=numplace+1
+				if(resultat_place==True):
+					resultat_etage=False
+				else:
+					numetage=numetage+1
+			if (resultat_etage==False):
+				Place.objects.filter(id=numplace, idEtage_id=numetage).update(etat=1)
+				Reservation.objects.create(idPlace_id=numplace, idCar_id=voiture_num, date_debut=str(datetime.now(tz=get_current_timezone())))
+				resultat["numero_etage"]=numetage
+				resultat["numero_palce"]=Place.objects.get(id=numplace, idEtage_id=numetage).numero
+				resultat["date_debut"]=Reservation.objects.get(idPlace_id=numplace, idCar_id=voiture_num, date_fin=None).date_debut
+				return TemplateResponse(request, 'home.html',resultat)
 			else:
-				numetage=numetage+1
-		if (resultat_etage==False):
-			Place.objects.filter(id=numplace, idEtage_id=numetage).update(etat=1)
-			Reservation.objects.create(idPlace_id=numplace,idCar_id=,voiture_num, date_debut=str(datetime.now(tz=get_current_timezone())))
-			return HttpResponse("done")
+				return HttpResponse("complet")	
 		else:
-			return HttpResponse("complet")
-	else:
-		return HttpResponse("deja reserver")
+			idplace=Reservation.objects.get(idCar_id=voiture_num, date_fin=None).idPlace_id
+			resultat["numero_etage"]=Place.objects.get(id=idplace).idEtage_id
+			resultat["numero_palce"]=Place.objects.get(id=idplace).numero
+			resultat["date_debut"]=Reservation.objects.get(idPlace_id=idplace, idCar_id=voiture_num, date_fin=None).date_debut
+			return TemplateResponse(request, 'home.html',resultat)
+		#print((Res action="/money" method="POST"ervation.objects.get(idCar_id=voiture_num, date_fin = None).id)
+		return HttpResponse("done")
+		
 
-#mezelet
 def money(request):
-	Place.objects.select_related().filter(id=identif).update(etat=0)
-	res=Reservation.objects.get(idPlace_id=identif, date_fin= None).id
-	Facture.objects.create(idReservation_id=(Reservation.objects.get(idPlace_id=identif, date_fin= None).id))
-	Reservation.objects.filter(idPlace_id=identif, date_fin= None).update(date_fin=str(datetime.now(tz=get_current_timezone())))
-	date=Reservation.objects.get(id=res).date_fin - Reservation.objects.get(id=res).date_debut
+	voiture_num=int(request.COOKIES.get('Your_Cookies'))
+	res=Reservation.objects.get(idCar_id=voiture_num, date_fin=None)
+	Place.objects.select_related().filter(id=res.idPlace_id).update(etat=0)
+	Facture.objects.create(idReservation_id=(Reservation.objects.get(idPlace_id=res.idPlace_id, date_fin= None).id))
+	Reservation.objects.filter(idPlace_id=res.idPlace_id, date_fin= None).update(date_fin=str(datetime.now(tz=get_current_timezone())))
+	date=Reservation.objects.get(id=res.id).date_fin - Reservation.objects.get(id=res.id).date_debut
+	place={}
 	datesec = date.seconds
 	hours=datesec/3600
 	minutes = (datesec-hours*3600)/60
@@ -97,9 +108,10 @@ def money(request):
 	money = hours*1
 	if (minutes !=0 | seconds !=0):
 		money=money + 1	
-	Facture.objects.filter(idReservation_id=res).update(prix_total=money)
+	Facture.objects.filter(idReservation_id=res.id).update(prix_total=money)
 	place["money"]=money
 	response=HttpResponse(json.dumps(place))
 	del request.session['my_car']
 	response.delete_cookie('Your_Cookies')
 	return response
+	
