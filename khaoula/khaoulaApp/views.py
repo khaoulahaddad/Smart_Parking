@@ -108,6 +108,7 @@ def money(request):
 	money = hours*1
 	if (minutes !=0 | seconds !=0):
 		money=money + 1	
+	print(money)
 	Facture.objects.filter(idReservation_id=res.id).update(prix_total=money)
 	place["money"]=money
 	response=HttpResponse(json.dumps(place))

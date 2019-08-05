@@ -1,4 +1,4 @@
-function money(e){
+function money(){
 	
 	$.ajax({
 		type: 'GET',
