@@ -58,7 +58,6 @@ def home(request):
 			resultat_etage=True
 			numetage=0
 			last_id_etage=Etage.objects.order_by('id').last().id
-			print(last_id_etage)
 			while ((resultat_etage==True) & (numetage <= last_id_etage)):
 				resultat_place=False
 				last_place = Place.objects.filter(idEtage_id=numetage).order_by('id').last().id
@@ -101,14 +100,14 @@ def money(request):
 	Reservation.objects.filter(idPlace_id=res.idPlace_id, date_fin= None).update(date_fin=str(datetime.now(tz=get_current_timezone())))
 	date=Reservation.objects.get(id=res.id).date_fin - Reservation.objects.get(id=res.id).date_debut
 	place={}
+	money=date.days*10 #prix de 24h = 10Dt
 	datesec = date.seconds
 	hours=datesec/3600
 	minutes = (datesec-hours*3600)/60
 	seconds = datesec-hours*3600-minutes*60
-	money = hours*1
+	money = money + hours*1 #prix 1Dt
 	if (minutes !=0 | seconds !=0):
 		money=money + 1	
-	print(money)
 	Facture.objects.filter(idReservation_id=res.id).update(prix_total=money)
 	place["money"]=money
 	response=HttpResponse(json.dumps(place))
