@@ -13,6 +13,11 @@ class Place(models.Model):
 		unique_together = (('numero', 'idEtage'),)
 	def __unicode__(self):
 		return "{0} [{1}]".format(self.num,self.numero, self.etat, self.idEtage.num)
+class Test(models.Model):
+	matricule_gauche = models.CharField(max_length=3,null=True)
+	matricule_droite = models.CharField(max_length=4,null=True)
+	def __unicode__(self):
+		return "{0} [{1}]".format(self.num,self.matricule_gauche, self.matricule_droite)
 
 class Voiture(models.Model):
 	matricule_gauche = models.CharField(max_length=3,null=True)

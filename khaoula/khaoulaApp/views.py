@@ -8,6 +8,7 @@ from khaoulaApp.models import Reservation
 from khaoulaApp.models import Facture
 from khaoulaApp.models import Voiture
 from khaoulaApp.models import Etage
+from khaoulaApp.models import Test
 import json
 import time
 from datetime import datetime
@@ -31,17 +32,19 @@ def login(request):
 	matri_droite = request.POST.get('matricule_droite',False)
 	request.session['my_car']=str(matri_gauche)+str(matri_droite)
 	response = HttpResponseRedirect('/home')
-#verification avec openCv True
-	if(not Voiture.objects.filter(matricule_gauche=matri_gauche, matricule_droite=matri_droite)):
-		Voiture.objects.create(matricule_gauche=matri_gauche, matricule_droite=matri_droite)
-	voiture_num=Voiture.objects.get(matricule_gauche=matri_gauche, matricule_droite=matri_droite).id
-	response.set_cookie('Your_Cookies', voiture_num)
-	return response
-#else:
-	##if(not(request.COOKIES.get('Your_Cookies'))):
-		##return HttpResponseRedirect('/')
-	##else:
-		##return HttpResponseRedirect('/home')
+
+	if(not(request.COOKIES.get('Your_Cookies'))):
+		voiture = Test.objects.order_by('id').last()
+		if((matri_gauche == voiture.matricule_gauche) & (matri_droite == voiture.matricule_droite)):
+			if(not Voiture.objects.filter(matricule_gauche=matri_gauche, matricule_droite=matri_droite)):
+				Voiture.objects.create(matricule_gauche=matri_gauche, matricule_droite=matri_droite)
+			voiture_num=Voiture.objects.get(matricule_gauche=matri_gauche, matricule_droite=matri_droite).id
+			response.set_cookie('Your_Cookies', voiture_num)
+			return response
+		else:
+			return HttpResponseRedirect('/')
+	else:
+		return HttpResponseRedirect('/home')
 
 def home(request):
 	my_car = request.session.get('my_car')
